@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 $posts = [
@@ -38,7 +39,9 @@ $posts = [
 Route::view('/', 'home.index')->name('home.index');
 Route::view('/contact', 'home.contact')->name('home.contact');
 
-Route::get('/posts', function() use ($posts){
+Route::get('/posts', function(Request $request) use ($posts){
+    // dd($request()->all());
+    dd($request()->input('page',1));
     // compact($posts)
     return view('posts.index',['posts'=>$posts]);
 });
@@ -55,4 +58,36 @@ Route::get('/recent-posts/{days_ago?}', function($daysAgo=20){
     return 'Posts from ' . $daysAgo . ' days ago';
 })->name('post.recent.index');
 
+Route::prefix('/fun')->name('fun.')->group(function() use ($posts){
+    Route::get('responses', function() use ($posts){
+        return response($posts,201)
+        ->header('Content-Type','application/json')
+        ->cookie('MY_COOKIE','Piotr Jura', 3600);
+    })->name('response');
+    
+    Route::get('redirect', function(){
+        return redirect('/contact');
+    })->name('redirect');
+    
+    Route::get('back', function(){
+        return back();
+    })->name('back');
+    
+    Route::get('named-route', function(){
+        return redirect()->route('posts.show',['id'=>1]);
+    })->name('named-route');
+    
+    Route::get('away', function(){
+        return redirect()->away('https://google.com');
+    })->name('away');
+    
+    Route::get('json', function() use ($posts){
+        return response()->json($posts);
+    })->name('json');
+    
+    Route::get('download', function() use ($posts){
+        return response()->download(public_path('daniel.jpg'),'face.jpg');
+    })->name('download');
+    
+});
 
