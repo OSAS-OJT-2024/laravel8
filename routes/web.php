@@ -1,7 +1,11 @@
 <?php
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AboutController;
+use App\Http\Controllers\PostController;
 
 $posts = [
     1 => [
@@ -24,6 +28,8 @@ $posts = [
     ]
 ];
 
+Route::resource('posts', PostController::class)->only(['index','show']);
+
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -36,27 +42,29 @@ $posts = [
 //     return view('home.contact');
 // })->name('contact.index');
 
-Route::view('/', 'home.index')->name('home.index');
-Route::view('/contact', 'home.contact')->name('home.contact');
+// Route::get('/', [HomeController::class, 'home'])->name('home.index');
+// Route::get('/', [HomeController::class, 'contact'])->name('home.contact');
 
-Route::get('/posts', function(Request $request) use ($posts){
-    // dd($request()->all());
-    dd($request()->input('page',1));
-    // compact($posts)
-    return view('posts.index',['posts'=>$posts]);
-});
+// Route::get('/single', AboutController::class);
 
-Route::get('/posts/{id}', function($id) use($posts){
-    abort_if(!isset($posts[$id]), 404);
-    return view('posts.show', ['post'=>$posts[$id]]);
-})->where([
-    'id'=>'[0-9]+'
-])->name('posts.show');
+// Route::get('/posts', function(Request $request) use ($posts){
+//     // dd($request->all());
+//     dd((int)$request->query('page',1));
+//     // compact($posts)
+//     return view('posts.index',['posts'=>$posts]);
+// });
+
+// Route::get('/posts/{id}', function($id) use($posts){
+//     abort_if(!isset($posts[$id]), 404);
+//     return view('posts.show', ['post'=>$posts[$id]]);
+// })->where([
+//     'id'=>'[0-9]+'
+// ])->name('posts.show');
 
 
 Route::get('/recent-posts/{days_ago?}', function($daysAgo=20){
     return 'Posts from ' . $daysAgo . ' days ago';
-})->name('post.recent.index');
+})->name('post.recent.index')->middleware('auth');
 
 Route::prefix('/fun')->name('fun.')->group(function() use ($posts){
     Route::get('responses', function() use ($posts){
