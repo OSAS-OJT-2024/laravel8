@@ -10,7 +10,7 @@
 @endif
 
 @unless ($post['is_new'])
-<div>It is an old post... using unless</div>    
+<div>It is an old post... using blade laravel</div>
 @endunless
 
     <h1>{{$post['title']}}</h1>
@@ -18,6 +18,6 @@
 
 @isset($post['has_comments'])
 <div>The post has comments... using isset</div>
-    
+
 @endisset
 @endsection
