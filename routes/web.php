@@ -28,7 +28,7 @@ $posts = [
     ]
 ];
 
-Route::resource('posts', PostController::class)->only(['index','show']);
+Route::resource('posts', PostController::class)->only(['index','show', 'create', 'store']);
 
 // Route::get('/', function () {
 //     return view('welcome');

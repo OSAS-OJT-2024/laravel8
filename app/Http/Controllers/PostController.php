@@ -3,36 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\BlogPost;
 
 class PostController extends Controller
 {
-    private
-    $posts = [
-        1 => [
-            'title' => 'Intro to Laravel',
-            'content' => 'This is a short intro to Laravel',
-            'is_new'=>true,
-            'has_comments' =>true,
-        ],
-        2 => [
-            'title' => 'Intro to PHP',
-            'content' => 'This is a short intro to PHP',
-            'is_new'=>false,
-           
-        ],
-        3 => [
-            'title' => 'Intro to Golang',
-            'content' => 'This is a short intro to Golang',
-            'is_new'=>false,
-           
-        ]
-    ];
+    
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('posts.index',['posts'=>$this->posts]);
+        // return view('posts.index',['posts'=>BlogPost::all()]);
     }
 
     /**
@@ -40,7 +21,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
@@ -56,8 +37,8 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        abort_if(!isset($this->posts[$id]), 404);
-        return view('posts.show', ['post'=>$this->posts[$id]]);
+        // abort_if(!isset(BlogPost[$id]), 404);
+        // return view('posts.show', ['post'=>BlogPost::findOrFail[$id]]);
     }
 
     /**
